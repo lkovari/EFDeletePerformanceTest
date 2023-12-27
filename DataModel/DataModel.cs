@@ -7,12 +7,15 @@ namespace DataModel
     {
         public class DataContext : DbContext
         {
+            private const string MSSQL_CONNECTION
+                = "Data Source=LT-LKOVARI;Initial Catalog=LKEFPlayground;Integrated Security=True;Trust Server Certificate=True";
+
             public DbSet<ZipCode> ZipCode { get; set; }
             public DbSet<Address> Address { get; set; } // Will be used in the future.
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseSqlServer("Data Source=LT-LKOVARI;Initial Catalog=LKEFPlayground;Integrated Security=True;Trust Server Certificate=True");
+                optionsBuilder.UseSqlServer(MSSQL_CONNECTION);
             }
         }
     }
