@@ -65,24 +65,29 @@ namespace DeletePerformanceTest
 
         private static void DeleteZipCodesWithRemoveRange()
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
             var zipCodes = GetZipCodes();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             using var context = new DataContext();
             context.ZipCode.RemoveRange(zipCodes);
-            context.SaveChanges();
+            var deletedRowsCount = context.SaveChanges();
             watch.Stop();
             var elapsedMils = watch.ElapsedMilliseconds;
-            Console.WriteLine("Delete ZipCodes with RemoveRange elapsed time {0}ms.", elapsedMils);
+            zipCodes = GetZipCodes();
+            Console.Write("Delete #{0} ZipCodes with RemoveRange elapsed time {1}ms.", deletedRowsCount, elapsedMils);
+            Console.WriteLine(zipCodes.Count > 0 ? " Failed" : " Success");
         }
 
         private static void DeleteZipCodesWithExecuteDelete()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             using var context = new DataContext();
-            context.ZipCode.Where(t => t.Id > 0).ExecuteDelete();
+            var deletedRowsCount = context.ZipCode.Where(t => t.Id > 0).ExecuteDelete();
             watch.Stop();
             var elapsedMils = watch.ElapsedMilliseconds;
-            Console.WriteLine("Delete ZipCodes with ExecuteDelete elapsed time {0}ms.", elapsedMils);
+            Console.Write("Delete #{0} ZipCodes with ExecuteDelete elapsed time {1}ms.", deletedRowsCount, elapsedMils);
+            var zipCodes = GetZipCodes();
+            Console.WriteLine(zipCodes.Count > 0 ? " Failed" : " Success");
+
         }
     }
 }
