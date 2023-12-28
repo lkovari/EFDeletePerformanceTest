@@ -7,48 +7,63 @@ namespace DeletePerformanceTest
 {
     internal class Program
     {
-        private const string JSON_FILE_PATH
+        private const string JsonFilePath
             = "C:\\src\\C#\\EFDeletePerformanceTest\\DataModel\\ZipCodes.json";
 
+        private static List<ZipCode> _zipCodesToInsert = new List<ZipCode>() ;
+        
         static void Main(string[] args)
         {
             Console.WriteLine("EntityFramework RemoveRange() vs. ExecuteDelete() performance comparison");
             Console.WriteLine();
 
-            var zipCodes = GetZipCodes();
-            if (zipCodes != null && zipCodes.Count < 1)
+            var count = GetZipCodes().Count;
+            if (count < 1)
             {
-                List<ZipCode> zipCodesToInsert = DeserializeZipCodeJson2ZipCodeObject(JSON_FILE_PATH);
-                using var context = new DataContext();
-                context.ZipCode.AddRange(zipCodesToInsert);
-                context.SaveChanges();
+                count = SaveZipCodes();
             }
-            zipCodes = GetZipCodes();
-            Console.WriteLine("Initial count of US. Zip Codes {0}.", zipCodes.Count);
+            Console.WriteLine("Initial count of US. Zip Codes before execute ExecuteDelete {0}.", count);
 
             DeleteZipCodesWithExecuteDelete();
 
-            zipCodes = GetZipCodes();
-            if (zipCodes != null && zipCodes.Count < 1)
+            count = GetZipCodes().Count;
+            Console.WriteLine("Zip Codes deleted with ExecuteDelete, remains #{0} rows.", count);
+            
+            if (count < 1)
             {
-                List<ZipCode> zipCodesToInsert = DeserializeZipCodeJson2ZipCodeObject(JSON_FILE_PATH);
-                using var context = new DataContext();
-                context.ZipCode.AddRange(zipCodesToInsert);
-                context.SaveChanges();
+                count = SaveZipCodes();
             }
-
+            Console.WriteLine("Initial count of US. Zip Codes before execute RemoveRange {0}.", count);
+            
             DeleteZipCodesWithRemoveRange();
 
-            zipCodes = GetZipCodes();
-            if (zipCodes != null && zipCodes.Count < 1)
+            count = GetZipCodes().Count;
+            Console.WriteLine("Zip Codes deleted with RemoveRange, remains #{0} rows.", count);
+            if (count < 1)
             {
-                List<ZipCode> zipCodesToInsert = DeserializeZipCodeJson2ZipCodeObject("C:\\src\\C#\\LKEFPlayground\\ZipCodeData\\ZipCodes.json");
-                using var context = new DataContext();
-                context.ZipCode.AddRange(zipCodesToInsert);
-                context.SaveChanges();
+                count = SaveZipCodes();
             }
+            Console.WriteLine("#{0} Zip Codes restored into Db.", count);
         }
 
+        private static int SaveZipCodes()
+        {
+            var zipCodesToInsert = LoadZipCodes();
+            using var context = new DataContext();
+            context.ZipCode.AddRange(zipCodesToInsert);
+            return context.SaveChanges();
+        }
+        
+        private static List<ZipCode> LoadZipCodes()
+        {
+            if (_zipCodesToInsert.Count < 1)
+            {
+                _zipCodesToInsert = DeserializeZipCodeJson2ZipCodeObject(JsonFilePath);
+            }
+
+            return _zipCodesToInsert;
+        }
+        
         private static List<ZipCode> DeserializeZipCodeJson2ZipCodeObject(string filePathAndName)
         {
             var zipCodesJson = File.ReadAllText(filePathAndName);
