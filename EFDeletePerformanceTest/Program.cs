@@ -7,13 +7,13 @@ namespace DeletePerformanceTest
 {
     internal class Program
     {
-        private const string JsonFilePath
-            = "C:\\src\\C#\\EFDeletePerformanceTest\\DataModel\\ZipCodes.json";
+        private static string JsonFilePath = "\\net8.0\\ZipCodes.json";
 
-        private static List<ZipCode> _zipCodesToInsert = new List<ZipCode>() ;
-        
+        private static List<ZipCode> _zipCodesToInsert = new List<ZipCode>();
+
         static void Main(string[] args)
         {
+            JsonFilePath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + JsonFilePath;
             Console.WriteLine("EntityFramework RemoveRange() vs. ExecuteDelete() performance comparison");
             Console.WriteLine();
 
@@ -28,13 +28,13 @@ namespace DeletePerformanceTest
 
             count = GetZipCodes().Count;
             Console.WriteLine("Zip Codes deleted with ExecuteDelete, remains #{0} rows.", count);
-            
+
             if (count < 1)
             {
                 count = SaveZipCodes();
             }
             Console.WriteLine("Initial count of US. Zip Codes before execute RemoveRange {0}.", count);
-            
+
             DeleteZipCodesWithRemoveRange();
 
             count = GetZipCodes().Count;
@@ -53,7 +53,7 @@ namespace DeletePerformanceTest
             context.ZipCode.AddRange(zipCodesToInsert);
             return context.SaveChanges();
         }
-        
+
         private static List<ZipCode> LoadZipCodes()
         {
             if (_zipCodesToInsert.Count < 1)
@@ -63,7 +63,7 @@ namespace DeletePerformanceTest
 
             return _zipCodesToInsert;
         }
-        
+
         private static List<ZipCode> DeserializeZipCodeJson2ZipCodeObject(string filePathAndName)
         {
             var zipCodesJson = File.ReadAllText(filePathAndName);
