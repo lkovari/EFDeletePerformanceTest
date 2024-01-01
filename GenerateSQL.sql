@@ -21,21 +21,8 @@ CREATE TABLE [ZipCode] (
 );
 GO
 
-CREATE TABLE [Address] (
-    [Id] int NOT NULL IDENTITY,
-    [Address1] nvarchar(max) NOT NULL,
-    [Address2] nvarchar(max) NULL,
-    [ZipCodeId] int NOT NULL,
-    CONSTRAINT [PK_Address] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_Address_ZipCode_ZipCodeId] FOREIGN KEY ([ZipCodeId]) REFERENCES [ZipCode] ([Id]) ON DELETE CASCADE
-);
-GO
-
-CREATE INDEX [IX_Address_ZipCodeId] ON [Address] ([ZipCodeId]);
-GO
-
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240101133322_initial', N'8.0.0');
+VALUES (N'20240101193439_AddZipCodes', N'8.0.0');
 GO
 
 COMMIT;

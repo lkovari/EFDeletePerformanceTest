@@ -11,7 +11,7 @@ namespace DataModel
                 = "Data Source=LT-LKOVARI;Initial Catalog=LKEFPlayground;Integrated Security=True;Trust Server Certificate=True";
 
             public DbSet<ZipCode> ZipCode { get; set; }
-            public DbSet<Address> Address { get; set; } // Will be used in the future.
+            // public DbSet<Address> Address { get; set; } // Will be used in the future.
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {

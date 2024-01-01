@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataModel.Migrations
 {
     [DbContext(typeof(DataModel.DataContext))]
-    [Migration("20240101133322_initial")]
-    partial class initial
+    [Migration("20240101193439_AddZipCodes")]
+    partial class AddZipCodes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,31 +23,6 @@ namespace DataModel.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DomainModel.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ZipCodeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ZipCodeId");
-
-                    b.ToTable("Address");
-                });
 
             modelBuilder.Entity("DomainModel.ZipCode", b =>
                 {
@@ -75,17 +50,6 @@ namespace DataModel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ZipCode");
-                });
-
-            modelBuilder.Entity("DomainModel.Address", b =>
-                {
-                    b.HasOne("DomainModel.ZipCode", "ZipCode")
-                        .WithMany()
-                        .HasForeignKey("ZipCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ZipCode");
                 });
 #pragma warning restore 612, 618
         }

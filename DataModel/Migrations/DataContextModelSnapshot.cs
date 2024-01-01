@@ -21,31 +21,6 @@ namespace DataModel.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DomainModel.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ZipCodeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ZipCodeId");
-
-                    b.ToTable("Address");
-                });
-
             modelBuilder.Entity("DomainModel.ZipCode", b =>
                 {
                     b.Property<int>("Id")
@@ -72,17 +47,6 @@ namespace DataModel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ZipCode");
-                });
-
-            modelBuilder.Entity("DomainModel.Address", b =>
-                {
-                    b.HasOne("DomainModel.ZipCode", "ZipCode")
-                        .WithMany()
-                        .HasForeignKey("ZipCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ZipCode");
                 });
 #pragma warning restore 612, 618
         }
