@@ -17,6 +17,13 @@ namespace DataModel
             {
                 optionsBuilder.UseSqlServer(MSSQL_CONNECTION);
             }
+            /*
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                var zipCodeList = PrepareMigrationsDataHelper.ProvideSeedData();
+                modelBuilder.Entity<ZipCode>().HasData(zipCodeList);
+            }
+            */
         }
     }
 }

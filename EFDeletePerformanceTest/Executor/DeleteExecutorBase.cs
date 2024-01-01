@@ -1,21 +1,18 @@
-﻿using DomainModel;
-using System.Text.Json;
+﻿using DataModel;
+using DomainModel;
 using static DataModel.DataModel;
 
 namespace EFDeletePerformanceTest.TestCases
 {
     internal class DeleteExecutorBase
     {
-        private readonly string _jsonFilePath = "\\net8.0\\ZipCodes.json";
-
         protected List<ZipCode> _zipCodesToInsert;
 
         public DeleteExecutorBase()
         {
-            _jsonFilePath = Directory.GetParent(Directory.GetCurrentDirectory())!.FullName + _jsonFilePath;
-            DataContext _dataContext = new();
-            _dataContext.Database.EnsureCreated();
-            _zipCodesToInsert = LoadData();
+            DataContext dataContext = new();
+            dataContext.Database.EnsureCreated();
+            _zipCodesToInsert = PrepareMigrationsDataHelper.ProvideSeedData();
         }
 
 
@@ -25,7 +22,7 @@ namespace EFDeletePerformanceTest.TestCases
             dataContext.ZipCode.AddRange(_zipCodesToInsert);
             return dataContext.SaveChanges();
         }
-
+        /*
         public List<ZipCode> LoadData()
         {
             if (_zipCodesToInsert == null || _zipCodesToInsert.Count < 1)
@@ -42,7 +39,7 @@ namespace EFDeletePerformanceTest.TestCases
             return JsonSerializer.Deserialize<List<ZipCode>>(zipCodesJson,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!;
         }
-
+        */
         public List<ZipCode> GetZipCodeEntities()
         {
             var dataContext = new DataContext();
