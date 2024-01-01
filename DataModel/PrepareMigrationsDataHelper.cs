@@ -4,18 +4,28 @@ using static DataModel.DataModel;
 
 namespace DataModel
 {
-    public class PrepareMigrationsDataHelper
+    public sealed class PrepareMigrationsDataHelper
     {
         private static string _jsonFilePath = "\\net8.0\\ZipCodes.json";
+        private static DataContext _dataContext = new();
+        private static JsonSerializerOptions? _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+        private static List<ZipCode>? _zipCodesToInsert;
 
-        private static List<ZipCode> _zipCodesToInsert;
+        private PrepareMigrationsDataHelper() { }
 
-
+        private static PrepareMigrationsDataHelper? instance = null;
+        public static PrepareMigrationsDataHelper Instance
+        {
+            get
+            {
+                instance ??= new PrepareMigrationsDataHelper();
+                return instance;
+            }
+        }
 
         public static List<ZipCode> ProvideSeedData()
         {
             _jsonFilePath = Directory.GetParent(Directory.GetCurrentDirectory())!.FullName + _jsonFilePath;
-            DataContext _dataContext = new();
             _dataContext.Database.EnsureCreated();
             _zipCodesToInsert = LoadData();
             return _zipCodesToInsert;
@@ -34,8 +44,7 @@ namespace DataModel
         private static List<ZipCode> DeserializeZipCodeJson2ZipCodeObject(string filePathAndName)
         {
             var zipCodesJson = File.ReadAllText(filePathAndName);
-            return JsonSerializer.Deserialize<List<ZipCode>>(zipCodesJson,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!;
+            return JsonSerializer.Deserialize<List<ZipCode>>(zipCodesJson, _jsonSerializerOptions)!;
         }
     }
 }
