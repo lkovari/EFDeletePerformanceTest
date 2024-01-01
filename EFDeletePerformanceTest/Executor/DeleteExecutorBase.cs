@@ -15,18 +15,18 @@ namespace EFDeletePerformanceTest.TestCases
             _jsonFilePath = Directory.GetParent(Directory.GetCurrentDirectory())!.FullName + _jsonFilePath;
             DataContext _dataContext = new();
             _dataContext.Database.EnsureCreated();
-            _zipCodesToInsert = LoadZipCodes();
+            _zipCodesToInsert = LoadData();
         }
 
 
-        public int SaveZipCodes()
+        public int PrepareDataToDelete()
         {
             var dataContext = new DataContext();
             dataContext.ZipCode.AddRange(_zipCodesToInsert);
             return dataContext.SaveChanges();
         }
 
-        public List<ZipCode> LoadZipCodes()
+        public List<ZipCode> LoadData()
         {
             if (_zipCodesToInsert == null || _zipCodesToInsert.Count < 1)
             {
@@ -43,7 +43,7 @@ namespace EFDeletePerformanceTest.TestCases
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!;
         }
 
-        public List<ZipCode> GetZipCodes()
+        public List<ZipCode> GetZipCodeEntities()
         {
             var dataContext = new DataContext();
             return [.. dataContext.ZipCode];

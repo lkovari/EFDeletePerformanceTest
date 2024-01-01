@@ -11,7 +11,7 @@ namespace EFDeletePerformanceTest.DeleteTestCases
 
         public readonly string _testCaseName = "RemoveRange";
 
-        public int Delete()
+        public int DeleteEntities()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             _DbContext.ZipCode.RemoveRange(_zipCodes);

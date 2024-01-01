@@ -17,17 +17,17 @@ namespace EFDeletePerformanceTest.TestCases
             var count = 0;
             foreach (IDeleteCase deleteCase in _deleteCases)
             {
-                var zipCodes = GetZipCodes();
+                var zipCodes = GetZipCodeEntities();
                 count = zipCodes.Count;
                 if (count < 1)
                 {
-                    count = SaveZipCodes();
+                    count = PrepareDataToDelete();
                 }
                 Console.WriteLine("Initial count of US. Zip Codes before delete #{0} rows.", count);
 
-                deleteCase.Delete();
+                deleteCase.DeleteEntities();
 
-                zipCodes = GetZipCodes();
+                zipCodes = GetZipCodeEntities();
                 count = zipCodes.Count;
                 Console.WriteLine(zipCodes.Count > 0 ? " Failed" : " Success");
 
@@ -35,7 +35,7 @@ namespace EFDeletePerformanceTest.TestCases
             }
             if (count < 1)
             {
-                count = SaveZipCodes();
+                count = PrepareDataToDelete();
             }
             Console.WriteLine("Zip Codes inserted into Db. table #{0} rows.", count);
         }

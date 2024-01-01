@@ -2,6 +2,6 @@
 {
     public interface IDeleteCase
     {
-        public int Delete();
+        public int DeleteEntities();
     }
 }
