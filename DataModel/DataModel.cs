@@ -1,5 +1,6 @@
 ﻿using DomainModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DataModel
 {
@@ -7,6 +8,7 @@ namespace DataModel
     {
         public class DataContext : DbContext
         {
+            // private readonly StreamWriter _streamWriter = new StreamWriter("EFDeletePerformaceTestLog.txt", append: true);
             private const string MSSQL_CONNECTION
                 = "Data Source=LT-LKOVARI;Initial Catalog=LKEFPlayground;Integrated Security=True;Trust Server Certificate=True";
 
@@ -15,9 +17,17 @@ namespace DataModel
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseSqlServer(MSSQL_CONNECTION);
+                optionsBuilder.UseSqlServer(MSSQL_CONNECTION).LogTo(Console.WriteLine, new[]
+                    { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
             }
+
             /*
+            public override void Dispose()
+            {
+                base.Dispose();
+                _streamWriter.Dispose();
+            }
+
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 var zipCodeList = PrepareMigrationsDataHelper.ProvideSeedData();
