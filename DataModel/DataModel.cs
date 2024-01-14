@@ -8,7 +8,7 @@ namespace DataModel
     {
         public class DataContext : DbContext
         {
-            // private readonly StreamWriter _streamWriter = new StreamWriter("EFDeletePerformaceTestLog.txt", append: true);
+            private const bool DoExecuteLogging = false;
             private const string MSSQL_CONNECTION
                 = "Data Source=LT-LKOVARI;Initial Catalog=LKEFPlayground;Integrated Security=True;Trust Server Certificate=True";
 
@@ -17,8 +17,15 @@ namespace DataModel
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseSqlServer(MSSQL_CONNECTION).LogTo(Console.WriteLine, new[]
-                    { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+                if (DoExecuteLogging)
+                {
+                    _ = optionsBuilder.UseSqlServer(MSSQL_CONNECTION).LogTo(Console.WriteLine, new[]
+                        { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+                }
+                else
+                {
+                    optionsBuilder.UseSqlServer(MSSQL_CONNECTION);
+                }
             }
 
             /*

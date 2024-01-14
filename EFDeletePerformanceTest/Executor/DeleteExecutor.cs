@@ -9,7 +9,7 @@ namespace EFDeletePerformanceTest.TestCases
 
         public DeleteExecutor() : base()
         {
-            _deleteCases = [new ExecuteDeleteCase(), new RemoveRangeCase(_zipCodesToInsert)];
+            _deleteCases = [new ExecuteDeleteCase(), new RemoveRangeCase(_zipCodesToInsert), new RawSqlCase()];
 
         }
         public void ExecuteDelete()
